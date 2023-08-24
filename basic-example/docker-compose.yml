@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # JupyterHub docker-compose configuration file
-version: "3"
+version: "3.8"
 
 services:
   hub:
@@ -12,6 +12,12 @@ services:
       args:
         JUPYTERHUB_VERSION: latest
     restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+              - gpu
     image: jupyterhub
     container_name: jupyterhub
     networks:
@@ -32,7 +38,8 @@ services:
       # All containers will join this network
       DOCKER_NETWORK_NAME: jupyterhub-network
       # JupyterHub will spawn this Notebook image for users
-      DOCKER_NOTEBOOK_IMAGE: jupyter/base-notebook:latest
+      # Version of a jupyter/base-notebook based on nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
+      DOCKER_NOTEBOOK_IMAGE: ostfor/base-notebook:latest
       # Notebook directory inside user image
       DOCKER_NOTEBOOK_DIR: /home/jovyan/work
       # Using this run command

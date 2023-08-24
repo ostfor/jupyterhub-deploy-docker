@@ -46,6 +46,9 @@ c.DockerSpawner.remove = True
 # For debugging arguments passed to spawned containers
 c.DockerSpawner.debug = True
 
+# To enable nvidia runtime
+c.DockerSpawner.extra_create_kwargs.update({ 'runtime': 'nvidia' })
+
 # User containers will access hub by container name on the Docker network
 c.JupyterHub.hub_ip = "jupyterhub"
 c.JupyterHub.hub_port = 8080
@@ -64,3 +67,6 @@ c.NativeAuthenticator.open_signup = True
 admin = os.environ.get("JUPYTERHUB_ADMIN")
 if admin:
     c.Authenticator.admin_users = [admin]
+
+# Optional if you plan to connect from vscode.dev
+c.Spawner.args = ["--NotebookApp.allow_origin='https://.*vscode-cdn\.net'", "--no-browser"]
